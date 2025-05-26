@@ -18,8 +18,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1
 
       - name: Terraform Init & Apply
@@ -34,14 +34,14 @@ jobs:
       - name: Configure SSH Key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/mihir.pem
-          chmod 600 ~/.ssh/mihir.pem
-          ssh-keygen -y -f ~/.ssh/mihir.pem > ~/.ssh/mihir.pub || echo "Invalid key"
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/autodeploy.pem
+          chmod 600 ~/.ssh/autodeploy.pem
+          ssh-keygen -y -f ~/.ssh/autodeploy.pem > ~/.ssh/mihir.pub || echo "Invalid key"
 
       - name: Add SSH Host Key to Known Hosts
         run: |
           ssh-keyscan -H $(grep -oP '(?<=ansible_host=)[^ ]+' ansible-setup/inventory) >> ~/.ssh/known_hosts
-      
+
       - name: Run Ansible Playbook
         run: |
           cd ansible-setup
