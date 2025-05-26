@@ -36,7 +36,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/autodeploy.pem
           chmod 600 ~/.ssh/autodeploy.pem
-          ssh-keygen -y -f ~/.ssh/autodeploy.pem > ~/.ssh/autodeploy.pem || echo "Invalid key"
+          ssh-keygen -y -f ~/.ssh/autodeploy.pem > /dev/null || echo "Invalid key"
 
       - name: Add SSH Host Key to Known Hosts
         run: |
